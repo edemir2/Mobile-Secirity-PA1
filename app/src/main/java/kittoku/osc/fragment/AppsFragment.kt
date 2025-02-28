@@ -21,7 +21,7 @@ internal class AppsFragment : PreferenceFragmentCompat() {
     private lateinit var prefs: SharedPreferences
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(R.xml.blank_preference, rootKey)
+        setPreferencesFromResource(R.xml.preference, rootKey)
         setHasOptionsMenu(true)
         prefs = preferenceManager.sharedPreferences!!
 

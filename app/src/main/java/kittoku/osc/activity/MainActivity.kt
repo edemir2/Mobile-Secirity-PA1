@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.preference.EditTextPreference
 import androidx.preference.PreferenceFragmentCompat
@@ -71,19 +72,35 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.home_menu, menu)  // Ensure this is the correct menu file name
+        return true
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // ✅ Fix: Initialize `prefs` at the very beginning
+        prefs = PreferenceManager.getDefaultSharedPreferences(this)
+
         title = "${getString(R.string.app_name)}: ${BuildConfig.VERSION_NAME}"
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        // ✅ Fix: Use prefs AFTER initialization
+        val isDarkModeEnabled = prefs.getBoolean("dark_mode", false)
+        val mode = if (isDarkModeEnabled) {
+            AppCompatDelegate.MODE_NIGHT_YES
+        } else {
+            AppCompatDelegate.MODE_NIGHT_NO
+        }
+        AppCompatDelegate.setDefaultNightMode(mode)
+
         homeFragment = HomeFragment()
         settingFragment = SettingFragment()
 
         object : FragmentStateAdapter(this) {
             override fun getItemCount() = 2
-
             override fun createFragment(position: Int): Fragment {
                 return when (position) {
                     0 -> homeFragment
@@ -95,7 +112,6 @@ class MainActivity : AppCompatActivity() {
             binding.pager.adapter = it
         }
 
-
         TabLayoutMediator(binding.tabBar, binding.pager) { tab, position ->
             tab.text = when (position) {
                 0 -> "HOME"
@@ -105,11 +121,7 @@ class MainActivity : AppCompatActivity() {
         }.attach()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        MenuInflater(this).inflate(R.menu.home_menu, menu)
 
-        return true
-    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
@@ -123,10 +135,17 @@ class MainActivity : AppCompatActivity() {
             R.id.save_profile -> showSaveDialog()
 
             R.id.reload_defaults -> showReloadDialog()
+
+            // New Help Option
+            R.id.action_help -> {
+                val intent = Intent(this, HelpActivity::class.java)
+                startActivity(intent)
+            }
         }
 
         return true
     }
+
 
     private fun showSaveDialog() {
         val inflated = layoutInflater.inflate(dialogResource, null)

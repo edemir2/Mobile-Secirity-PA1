@@ -41,6 +41,11 @@
             android:exported="false"
             android:name=".activity.BlankActivity">
         </activity>
+        <activity
+            android:exported="false"
+            android:name=".activity.HelpActivity">
+        </activity>
+
 
         <service
             android:exported="true"

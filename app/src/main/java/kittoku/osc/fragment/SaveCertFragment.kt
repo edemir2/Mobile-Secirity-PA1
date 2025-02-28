@@ -25,7 +25,7 @@ internal class SaveCertFragment(private val givenIntent: Intent) : PreferenceFra
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(R.xml.blank_preference, rootKey)
+        setPreferencesFromResource(R.xml.preference, rootKey)
 
         Intent(Intent.ACTION_CREATE_DOCUMENT).also {
             it.addCategory(Intent.CATEGORY_OPENABLE)

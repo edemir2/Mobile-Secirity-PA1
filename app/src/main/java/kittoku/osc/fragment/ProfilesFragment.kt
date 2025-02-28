@@ -20,7 +20,7 @@ internal class ProfilesFragment : PreferenceFragmentCompat() {
     private var dialogResource = 0
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(R.xml.blank_preference, rootKey)
+        setPreferencesFromResource(R.xml.preference, rootKey)
         setHasOptionsMenu(true)
         prefs = preferenceManager.sharedPreferences!!
         dialogResource = EditTextPreference(requireContext()).dialogLayoutResource
